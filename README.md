@@ -1,0 +1,3 @@
+# QuickPoll
+Strawpoll clone.
+
