@@ -3,7 +3,7 @@ use Mix.Config
 # Configure your database
 config :quick_poll, QuickPoll.Repo,
   username: "postgres",
-  password: "postgres",
+  password: "pass",
   database: "quick_poll_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
