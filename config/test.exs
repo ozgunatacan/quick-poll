@@ -3,7 +3,7 @@ use Mix.Config
 # Configure your database
 config :quick_poll, QuickPoll.Repo,
   username: "postgres",
-  password: "postgres",
+  password: "pass",
   database: "quick_poll_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
