@@ -1,0 +1,15 @@
+<div>
+  <h1>New Poll</h1>
+
+  <%= form_for @changeset, Routes.poll_path(@conn, :create), fn f -> %>
+    <div>
+      <%= text_input f, :question, placeholder: "Type your question here" %>
+    </div>
+    <div>
+      <div><input type="text" name="option1" placeholder="Enter poll option"></div>
+      <div><input type="text" name="option2" placeholder="Enter poll option"></div>
+      <div><input type="text" name="option3" placeholder="Enter poll option"></div>
+    </div>
+    <%= submit "Create"  %>
+  <% end %>
+</div>
