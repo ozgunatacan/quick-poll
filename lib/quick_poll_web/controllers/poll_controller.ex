@@ -1,10 +1,10 @@
 defmodule QuickPollWeb.PollController do
   use QuickPollWeb, :controller
 
-  alias QuickPoll.Polls
+  alias QuickPoll.{Poll, Option, Polls}
 
   def new(conn, _params) do
-    changeset = Polls.new_poll()
-    render(conn, "new.html", changeset: changeset)
+    poll = Polls.change_poll(%Poll{options: [%Option{}, %Option{}]})
+    render(conn, "new.html", poll: poll)
   end
 end

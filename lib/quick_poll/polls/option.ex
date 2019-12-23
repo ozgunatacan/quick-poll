@@ -15,7 +15,7 @@ defmodule QuickPoll.Option do
 
   def changeset(%Option{} = option, attrs) do
     option
-    |> cast(attrs, [:title, :poll_id, :votes])
-    |> validate_required([:title, :poll_id])
+    |> cast(attrs, [:title, :votes])
+    |> validate_required([:title])
   end
 end

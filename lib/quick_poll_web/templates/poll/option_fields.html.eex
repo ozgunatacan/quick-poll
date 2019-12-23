@@ -1,0 +1,8 @@
+<%= inputs_for @f, :options, fn p -> %>
+  <div id="new-option">
+    <div class="form-group">
+      <%= text_input p, :title, placeholder: "Enter poll option", class: "form-control" %>
+      <%= error_tag p, :title%>
+    </div>
+  </div>
+<% end %>

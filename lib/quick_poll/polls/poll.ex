@@ -19,6 +19,8 @@ defmodule QuickPoll.Poll do
   def changeset(%Poll{} = poll, attrs) do
     poll
     |> cast(attrs, [:question, :multi, :duplicate_check, :spam_prevention])
+    |> cast_assoc(:options, required: true)
     |> validate_required([:question])
+    |> validate_length(:question, max: 200)
   end
 end
