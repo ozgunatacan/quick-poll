@@ -19,6 +19,7 @@ defmodule QuickPollWeb.Router do
     get "/", PageController, :index
 
     resources "/polls", PollController, only: [:index, :new, :show, :create]
+    post "/polls/:id/vote", PollController, :vote
   end
 
   # Other scopes may use custom stacks.

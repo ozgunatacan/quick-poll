@@ -1,0 +1,10 @@
+<div>
+  <h1>Poll <%= @poll.question %></h1>
+  <%= form_for :poll, Routes.poll_path(@conn, :vote, @poll), fn f -> %>
+    <%= for option <- @poll.options do %>
+      <%= radio_button(f, :vote, option.id) %> <%= option.title %> </br>
+    <% end %>
+
+    <%= submit "Vote" %>
+  <% end %>
+</div>

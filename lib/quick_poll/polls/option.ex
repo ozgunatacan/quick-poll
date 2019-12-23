@@ -17,5 +17,6 @@ defmodule QuickPoll.Option do
     option
     |> cast(attrs, [:title, :votes])
     |> validate_required([:title])
+    |> validate_length(:title, max: 200)
   end
 end

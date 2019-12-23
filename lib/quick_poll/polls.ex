@@ -16,7 +16,7 @@ defmodule QuickPoll.Polls do
     |> Repo.insert()
   end
 
-  def get_poll(id) do
+  def get_poll!(id) do
     Repo.get!(Poll, id)
     |> Repo.preload(:options)
   end
