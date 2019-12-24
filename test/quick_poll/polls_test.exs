@@ -36,6 +36,21 @@ defmodule QuickPoll.PollsTest do
         Polls.create_poll(Map.merge(@valid_attrs, %{options: [%{not_valid: "test"}]}))
 
       assert %{options: [%{title: ["can't be blank"]}]} == errors_on(changeset)
+
+      {:error, changeset} =
+        Polls.create_poll(
+          Map.merge(@valid_attrs, %{options: [%{title: String.duplicate("a", 201)}]})
+        )
+
+      assert %{options: [%{title: ["should be at most 200 character(s)"]}]} ==
+               errors_on(changeset)
+    end
+
+    test "create a poll with too long question" do
+      {:error, changeset} =
+        Polls.create_poll(Map.merge(@valid_attrs, %{question: String.duplicate("q", 201)}))
+
+      assert %{question: ["should be at most 200 character(s)"]} == errors_on(changeset)
     end
 
     test "list_polls/0 return all polls" do

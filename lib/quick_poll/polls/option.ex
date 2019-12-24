@@ -7,7 +7,6 @@ defmodule QuickPoll.Option do
 
   schema "options" do
     field :title, :string
-    field :votes, :integer, default: 0
     belongs_to :poll, Poll
 
     timestamps()
@@ -15,7 +14,7 @@ defmodule QuickPoll.Option do
 
   def changeset(%Option{} = option, attrs) do
     option
-    |> cast(attrs, [:title, :votes])
+    |> cast(attrs, [:title])
     |> validate_required([:title])
     |> validate_length(:title, max: 200)
   end
