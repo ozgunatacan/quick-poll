@@ -4,7 +4,7 @@ defmodule QuickPoll.Repo.Migrations.CreateOptionsTable do
   def change do
     create table("options") do
       add :title, :string, null: false
-      add :poll_id, references("polls"), on_delete: :delete_all
+      add :poll_id, references("polls", on_delete: :delete_all)
 
       timestamps()
     end

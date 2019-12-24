@@ -1,5 +1,6 @@
 defmodule QuickPoll.Polls do
-  alias QuickPoll.{Poll, Repo}
+  alias QuickPoll.{Poll, Repo, Vote}
+  import Ecto.Query
 
   def list_polls() do
     Repo.all(Poll)
@@ -19,5 +20,21 @@ defmodule QuickPoll.Polls do
   def get_poll!(id) do
     Repo.get!(Poll, id)
     |> Repo.preload(:options)
+  end
+
+  def vote(attrs) do
+    %Vote{}
+    |> Vote.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def results(poll_id) do
+    q =
+      from v in Vote,
+        where: v.poll_id == ^poll_id,
+        group_by: v.option_id,
+        select: {v.option_id, count(v.id)}
+
+    Repo.all(q)
   end
 end

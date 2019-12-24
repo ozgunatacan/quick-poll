@@ -59,5 +59,20 @@ defmodule QuickPoll.PollsTest do
 
       assert Polls.list_polls() == [poll1, poll2]
     end
+
+    test "vote existing poll and option" do
+      poll1 = insert!(:poll_with_option)
+      poll1 = Polls.get_poll!(poll1.id)
+      [option1, option2] = poll1.options
+
+      {:ok, _vote} = Polls.vote(%{poll_id: poll1.id, option_id: option1.id})
+      assert Polls.results(poll1.id) == [{option1.id, 1}]
+
+      {:ok, _vote} = Polls.vote(%{poll_id: poll1.id, option_id: option2.id})
+      assert Polls.results(poll1.id) == [{option1.id, 1}, {option2.id, 1}]
+
+      {:ok, _vote} = Polls.vote(%{poll_id: poll1.id, option_id: option1.id})
+      assert Polls.results(poll1.id) == [{option1.id, 2}, {option2.id, 1}]
+    end
   end
 end
