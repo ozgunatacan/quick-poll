@@ -35,6 +35,6 @@ defmodule QuickPoll.Polls do
         group_by: v.option_id,
         select: {v.option_id, count(v.id)}
 
-    Repo.all(q)
+    Map.new(Repo.all(q))
   end
 end

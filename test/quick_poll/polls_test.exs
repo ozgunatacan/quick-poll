@@ -66,13 +66,45 @@ defmodule QuickPoll.PollsTest do
       [option1, option2] = poll1.options
 
       {:ok, _vote} = Polls.vote(%{poll_id: poll1.id, option_id: option1.id})
-      assert Polls.results(poll1.id) == [{option1.id, 1}]
+      assert Polls.results(poll1.id) == %{option1.id => 1}
 
       {:ok, _vote} = Polls.vote(%{poll_id: poll1.id, option_id: option2.id})
-      assert Polls.results(poll1.id) == [{option1.id, 1}, {option2.id, 1}]
+      assert Polls.results(poll1.id) == %{option1.id => 1, option2.id => 1}
 
       {:ok, _vote} = Polls.vote(%{poll_id: poll1.id, option_id: option1.id})
-      assert Polls.results(poll1.id) == [{option1.id, 2}, {option2.id, 1}]
+      assert Polls.results(poll1.id) == %{option1.id => 2, option2.id => 1}
+    end
+
+    test "vote an existing poll with options from other poll" do
+      poll1 = insert!(:poll_with_option)
+      poll1 = Polls.get_poll!(poll1.id)
+      [option11, _option12] = poll1.options
+
+      poll2 = insert!(:poll_with_option)
+      poll2 = Polls.get_poll!(poll2.id)
+      [option21, _option22] = poll2.options
+
+      {:error, changeset} = Polls.vote(%{poll_id: poll1.id, option_id: option21.id})
+      assert %{option_id: ["Vote is not valid"]} == errors_on(changeset)
+
+      {:ok, _vote} = Polls.vote(%{poll_id: poll1.id, option_id: option11.id})
+      assert Polls.results(poll1.id) == %{option11.id => 1}
+    end
+
+    test "vote an invalid poll with options from other poll" do
+      poll1 = insert!(:poll_with_option)
+      poll1 = Polls.get_poll!(poll1.id)
+      [option11, _option12] = poll1.options
+
+      poll2 = insert!(:poll_with_option)
+      poll2 = Polls.get_poll!(poll2.id)
+      [option21, _option22] = poll2.options
+
+      {:error, changeset} = Polls.vote(%{poll_id: poll1.id, option_id: option21.id})
+      assert %{option_id: ["Vote is not valid"]} == errors_on(changeset)
+
+      {:ok, _vote} = Polls.vote(%{poll_id: poll1.id, option_id: option11.id})
+      assert Polls.results(poll1.id) == %{option11.id => 1}
     end
   end
 end
