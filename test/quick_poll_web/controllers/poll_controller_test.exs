@@ -70,4 +70,21 @@ defmodule QuickPollWeb.PollControllerTest do
     assert redirected_to(conn) =~ Routes.poll_path(conn, :show, poll.id)
     assert get_flash(conn, :error) == "Something went wrong."
   end
+
+  test "show results of the poll", %{conn: conn} do
+    poll = insert_poll_with_options()
+    [op1, op2] = poll.options
+
+    insert(:vote, %{poll: poll, option: op1})
+    insert(:vote, %{poll: poll, option: op1})
+    insert(:vote, %{poll: poll, option: op1})
+    insert(:vote, %{poll: poll, option: op2})
+    insert(:vote, %{poll: poll, option: op2})
+
+    conn = get(conn, Routes.poll_path(conn, :results, poll.id))
+
+    assert html_response(conn, 200) =~ poll.question
+    assert html_response(conn, 200) =~ "#{op1.title} Votes: #{3}"
+    assert html_response(conn, 200) =~ "#{op2.title} Votes: #{2}"
+  end
 end

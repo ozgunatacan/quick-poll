@@ -83,5 +83,18 @@ defmodule QuickPoll.PollsTest do
       {:ok, _vote} = Polls.vote(poll1, %{poll_id: poll1.id, option_id: option11.id})
       assert Polls.results(poll1.id) == %{option11.id => 1}
     end
+
+    test "vote an existing poll and calculate results" do
+      poll = insert_poll_with_options()
+      [op1, op2] = poll.options
+
+      insert(:vote, %{poll: poll, option: op1})
+      insert(:vote, %{poll: poll, option: op1})
+      insert(:vote, %{poll: poll, option: op1})
+      insert(:vote, %{poll: poll, option: op2})
+      insert(:vote, %{poll: poll, option: op2})
+
+      assert Polls.results(poll.id) == %{op1.id => 3, op2.id => 2}
+    end
   end
 end

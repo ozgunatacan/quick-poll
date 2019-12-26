@@ -48,6 +48,8 @@ defmodule QuickPollWeb.PollController do
   end
 
   def results(conn, %{"id" => id}) do
-    render(conn, "results.html")
+    poll = Polls.get_poll!(id)
+    results = Polls.results(poll.id)
+    render(conn, "results.html", poll: poll, results: results)
   end
 end
