@@ -43,7 +43,8 @@ defmodule QuickPoll.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:ex_machina, "~> 2.3", only: :test}
+      {:ex_machina, "~> 2.3", only: :test},
+      {:sobelow, "~> 0.8", only: :dev}
     ]
   end
 
