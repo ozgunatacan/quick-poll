@@ -2,13 +2,7 @@ defmodule QuickPollWeb.PollControllerTest do
   use QuickPollWeb.ConnCase
   import QuickPoll.Factory
 
-  @valid_attrs %{
-    question: "question",
-    multi: false,
-    duplicate_check: 1,
-    spam_prevention: false,
-    options: %{"1" => %{title: "op 1"}, "23412341" => %{title: "op 2"}}
-  }
+  @valid_attrs nested_form_params()
 
   test "show new poll form", %{conn: conn} do
     conn = get(conn, "/polls/new")
@@ -24,7 +18,7 @@ defmodule QuickPollWeb.PollControllerTest do
   end
 
   test "Show poll", %{conn: conn} do
-    poll = insert!(:poll_with_option)
+    poll = insert_poll_with_options()
     [op1, op2] = poll.options
     conn = get(conn, Routes.poll_path(conn, :show, poll.id))
 
@@ -34,7 +28,7 @@ defmodule QuickPollWeb.PollControllerTest do
   end
 
   test "vote with no vote params", %{conn: conn} do
-    poll = insert!(:poll_with_option)
+    poll = insert_poll_with_options()
     [_op1, _op2] = poll.options
 
     attrs = %{}
@@ -45,7 +39,7 @@ defmodule QuickPollWeb.PollControllerTest do
   end
 
   test "vote a valid poll and option", %{conn: conn} do
-    poll = insert!(:poll_with_option)
+    poll = insert_poll_with_options()
     [op1, _op2] = poll.options
 
     attrs = %{"vote" => %{option_id: op1.id}}
@@ -56,7 +50,7 @@ defmodule QuickPollWeb.PollControllerTest do
   end
 
   test "vote with invalid poll and valid option", %{conn: conn} do
-    poll = insert!(:poll_with_option)
+    poll = insert_poll_with_options()
     [_op1, op2] = poll.options
 
     attrs = %{"vote" => %{option_id: op2.id}}
@@ -67,7 +61,7 @@ defmodule QuickPollWeb.PollControllerTest do
   end
 
   test "vote with valid poll and invalid option", %{conn: conn} do
-    poll = insert!(:poll_with_option)
+    poll = insert_poll_with_options()
     [_op1, _op2] = poll.options
 
     attrs = %{"vote" => %{option_id: "122345"}}
