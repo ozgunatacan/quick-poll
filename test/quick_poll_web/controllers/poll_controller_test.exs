@@ -33,6 +33,17 @@ defmodule QuickPollWeb.PollControllerTest do
     assert html_response(conn, 200) =~ op2.title
   end
 
+  test "vote with no vote params", %{conn: conn} do
+    poll = insert!(:poll_with_option)
+    [_op1, _op2] = poll.options
+
+    attrs = %{}
+    conn = post(conn, Routes.poll_path(conn, :vote, poll.id), attrs)
+
+    assert redirected_to(conn) =~ Routes.poll_path(conn, :show, poll.id)
+    assert get_flash(conn, :error) == "Please choose an option."
+  end
+
   test "vote a valid poll and option", %{conn: conn} do
     poll = insert!(:poll_with_option)
     [op1, _op2] = poll.options
@@ -62,7 +73,6 @@ defmodule QuickPollWeb.PollControllerTest do
     attrs = %{"vote" => %{option_id: "122345"}}
     conn = post(conn, Routes.poll_path(conn, :vote, poll.id), attrs)
 
-    assert %{id: poll_id} = redirected_params(conn)
     assert redirected_to(conn) =~ Routes.poll_path(conn, :show, poll.id)
     assert get_flash(conn, :error) == "Something went wrong."
   end

@@ -39,6 +39,14 @@ defmodule QuickPollWeb.PollController do
     end
   end
 
+  def vote(conn, %{"id" => id}) do
+    _poll = Polls.get_poll!(id)
+
+    conn
+    |> put_flash(:error, "Please choose an option.")
+    |> redirect(to: Routes.poll_path(conn, :show, id))
+  end
+
   def results(conn, %{"id" => id}) do
     render(conn, "results.html")
   end
