@@ -2,7 +2,7 @@ defmodule QuickPoll.Vote do
   use Ecto.Schema
 
   import Ecto.Changeset
-  alias QuickPoll.{Poll, Option, Vote, Repo}
+  alias QuickPoll.{Poll, Option, Vote}
 
   @timestamps_opts [type: :utc_datetime]
 
@@ -13,24 +13,25 @@ defmodule QuickPoll.Vote do
     timestamps()
   end
 
-  def changeset(%Vote{} = vote, attrs) do
+  def changeset(%Vote{} = vote, attrs, poll) do
+    valid_options = Enum.map(poll.options, & &1.id)
+
     vote
-    |> cast(attrs, [:poll_id, :option_id])
+    |> cast(attrs, [:option_id])
+    |> put_change(:poll_id, poll.id)
     |> validate_required([:poll_id, :option_id])
-    |> validate_option
+    |> validate_options(valid_options)
     |> foreign_key_constraint(:poll_id)
     |> foreign_key_constraint(:option_id)
   end
 
-  def validate_option(changeset) do
+  def validate_options(changeset, valid_options) do
     case changeset.valid? do
       true ->
         option_id = get_field(changeset, :option_id)
 
-        with poll <- Repo.get!(Poll, get_field(changeset, :poll_id)) |> Repo.preload(:options),
-             true <- Enum.any?(poll.options, fn o -> o.id == option_id end) do
-          changeset
-        else
+        case Enum.member?(valid_options, option_id) do
+          true -> changeset
           _ -> add_error(changeset, :option_id, "Vote is not valid")
         end
 

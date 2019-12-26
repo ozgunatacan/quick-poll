@@ -25,17 +25,17 @@ defmodule QuickPollWeb.PollController do
     render(conn, "show.html", poll: poll)
   end
 
-  def vote(conn, %{"vote" => vote_params}) do
-    case Polls.vote(vote_params) do
-      {:ok, _vote} ->
-        conn
-        |> put_flash(:info, "Thanks for voting.")
-        |> redirect(to: Routes.poll_path(conn, :results, vote_params["poll_id"]))
-
-      {:error, _changeset} ->
+  def vote(conn, %{"id" => id, "vote" => vote_params}) do
+    with poll <- Polls.get_poll!(id),
+         {:ok, _vote} <- Polls.vote(poll, vote_params) do
+      conn
+      |> put_flash(:info, "Thanks for voting.")
+      |> redirect(to: Routes.poll_path(conn, :results, id))
+    else
+      _ ->
         conn
         |> put_flash(:error, "Something went wrong.")
-        |> redirect(to: Routes.poll_path(conn, :show, vote_params["poll_id"]))
+        |> redirect(to: Routes.poll_path(conn, :show, id))
     end
   end
 

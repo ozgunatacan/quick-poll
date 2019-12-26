@@ -35,10 +35,10 @@ defmodule QuickPollWeb.PollControllerTest do
 
   test "vote a valid poll and option", %{conn: conn} do
     poll = insert!(:poll_with_option)
-    [op1, op2] = poll.options
+    [op1, _op2] = poll.options
 
-    attrs = %{"vote" => %{poll_id: poll.id, option_id: op1.id}}
-    conn = post(conn, Routes.poll_path(conn, :vote), attrs)
+    attrs = %{"vote" => %{option_id: op1.id}}
+    conn = post(conn, Routes.poll_path(conn, :vote, poll.id), attrs)
 
     assert redirected_to(conn) =~ Routes.poll_path(conn, :results, poll.id)
     assert get_flash(conn, :info) == "Thanks for voting."
@@ -48,25 +48,22 @@ defmodule QuickPollWeb.PollControllerTest do
     poll = insert!(:poll_with_option)
     [_op1, op2] = poll.options
 
-    poll_id = poll.id
-    attrs = %{"vote" => %{poll_id: 12312, option_id: op2.id}}
-    conn = post(conn, Routes.poll_path(conn, :vote), attrs)
+    attrs = %{"vote" => %{option_id: op2.id}}
 
-    assert %{id: poll_id} = redirected_params(conn)
-    assert redirected_to(conn) =~ Routes.poll_path(conn, :show, poll_id)
-    assert get_flash(conn, :error) == "Something went wrong."
+    assert_error_sent 404, fn ->
+      post(conn, Routes.poll_path(conn, :vote, 12314), attrs)
+    end
   end
 
   test "vote with valid poll and invalid option", %{conn: conn} do
     poll = insert!(:poll_with_option)
-    [op1, op2] = poll.options
+    [_op1, _op2] = poll.options
 
-    poll_id = poll.id
-    attrs = %{"vote" => %{poll_id: poll_id, option_id: "122345"}}
-    conn = post(conn, Routes.poll_path(conn, :vote), attrs)
+    attrs = %{"vote" => %{option_id: "122345"}}
+    conn = post(conn, Routes.poll_path(conn, :vote, poll.id), attrs)
 
     assert %{id: poll_id} = redirected_params(conn)
-    assert redirected_to(conn) =~ Routes.poll_path(conn, :show, poll_id)
+    assert redirected_to(conn) =~ Routes.poll_path(conn, :show, poll.id)
     assert get_flash(conn, :error) == "Something went wrong."
   end
 end

@@ -22,9 +22,9 @@ defmodule QuickPoll.Polls do
     |> Repo.preload(:options)
   end
 
-  def vote(attrs) do
+  def vote(%Poll{} = poll, attrs) do
     %Vote{}
-    |> Vote.changeset(attrs)
+    |> Vote.changeset(attrs, poll)
     |> Repo.insert()
   end
 
