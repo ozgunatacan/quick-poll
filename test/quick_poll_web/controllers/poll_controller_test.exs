@@ -75,11 +75,8 @@ defmodule QuickPollWeb.PollControllerTest do
     poll = insert_poll_with_options()
     [op1, op2] = poll.options
 
-    insert(:vote, %{poll: poll, option: op1})
-    insert(:vote, %{poll: poll, option: op1})
-    insert(:vote, %{poll: poll, option: op1})
-    insert(:vote, %{poll: poll, option: op2})
-    insert(:vote, %{poll: poll, option: op2})
+    insert_list(3, :vote, %{poll: poll, option: op1})
+    insert_list(2, :vote, %{poll: poll, option: op2})
 
     conn = get(conn, Routes.poll_path(conn, :results, poll.id))
 
