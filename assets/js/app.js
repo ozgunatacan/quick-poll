@@ -14,15 +14,17 @@ import "phoenix_html"
 // Import local files
 //
 // Local files can be imported directly using relative paths, for example:
-// import socket from "./socket"
+import socket from "./socket"
 
-const el = document.getElementById('add_option');
-el.onclick = function(e){
-  e.preventDefault();
+if (document.querySelector('#add_option')) {
   const el = document.getElementById('add_option');
-  const time = new Date().getTime();
-  const template = el.getAttribute('data-template');
-  let uniq_template = template.replace(/\[0\]/g, `[${time}]`);
-  uniq_template = uniq_template.replace(/_0_/g, `_${time}_`);
-  this.insertAdjacentHTML('beforebegin', uniq_template);
-};
+  el.onclick = function(e){
+    e.preventDefault();
+    const el = document.getElementById('add_option');
+    const time = new Date().getTime();
+    const template = el.getAttribute('data-template');
+    let uniq_template = template.replace(/\[0\]/g, `[${time}]`);
+    uniq_template = uniq_template.replace(/_0_/g, `_${time}_`);
+    this.insertAdjacentHTML('beforebegin', uniq_template);
+  };
+}

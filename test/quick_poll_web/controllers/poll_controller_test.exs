@@ -56,7 +56,7 @@ defmodule QuickPollWeb.PollControllerTest do
     attrs = %{"vote" => %{option_id: op2.id}}
 
     assert_error_sent 404, fn ->
-      post(conn, Routes.poll_path(conn, :vote, 12314), attrs)
+      post(conn, Routes.poll_path(conn, :vote, 12_314), attrs)
     end
   end
 

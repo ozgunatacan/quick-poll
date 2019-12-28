@@ -2,7 +2,7 @@ defmodule QuickPollWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "room:*", QuickPollWeb.RoomChannel
+  channel "results:*", QuickPollWeb.ResultsChannel
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After

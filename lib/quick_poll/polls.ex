@@ -3,7 +3,8 @@ defmodule QuickPoll.Polls do
   import Ecto.Query
 
   def list_polls() do
-    Repo.all(Poll)
+    Poll
+    |> Repo.all()
     |> Repo.preload(:options)
   end
 
@@ -18,7 +19,14 @@ defmodule QuickPoll.Polls do
   end
 
   def get_poll!(id) do
-    Repo.get!(Poll, id)
+    Poll
+    |> Repo.get!(id)
+    |> Repo.preload(:options)
+  end
+
+  def get_poll(id) do
+    Poll
+    |> Repo.get(id)
     |> Repo.preload(:options)
   end
 

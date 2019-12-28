@@ -1,5 +1,7 @@
+<div id="poll-results" data-id="<%= @poll.id %>">
 <h1>Results</h1>
 <h2><%= @poll.question %></h2>
+
 <ul>
     <%= for option <- @poll.options do %>
       <li> <%= option.title %> Votes: <%= @results[option.id] %> </li>
