@@ -81,7 +81,7 @@ defmodule QuickPollWeb.PollControllerTest do
     conn = get(conn, Routes.poll_path(conn, :results, poll.id))
 
     assert html_response(conn, 200) =~ poll.question
-    assert html_response(conn, 200) =~ "#{op1.title} Votes: #{3}"
-    assert html_response(conn, 200) =~ "#{op2.title} Votes: #{2}"
+    assert html_response(conn, 200) =~ "#{op1.title} Votes: <span id=\"#{op1.id}\"> #{3}"
+    assert html_response(conn, 200) =~ "#{op2.title} Votes: <span id=\"#{op2.id}\"> #{2}"
   end
 end

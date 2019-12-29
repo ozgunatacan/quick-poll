@@ -20,6 +20,9 @@ if (document.querySelector('#poll-results')) {
 
   channel.on("results", (response) => {
     console.log(response)
+    Object.keys(response).forEach(id => {
+      document.getElementById(id).innerText=response[id]
+    });
   });
 }
 

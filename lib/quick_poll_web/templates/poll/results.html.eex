@@ -4,6 +4,8 @@
 
 <ul>
     <%= for option <- @poll.options do %>
-      <li> <%= option.title %> Votes: <%= @results[option.id] %> </li>
+      <li> 
+        <%= option.title %> Votes: <span id="<%= option.id %>"> <%= @results[option.id] %> </span> 
+      </li>
     <% end %>
 </ul>
