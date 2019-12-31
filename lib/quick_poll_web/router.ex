@@ -23,8 +23,13 @@ defmodule QuickPollWeb.Router do
     get "/polls/:id/results", PollController, :results
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", QuickPollWeb do
-  #   pipe_through :api
-  # end
+  scope "/api" do
+    pipe_through :api
+
+    forward "/graphiql", Absinthe.Plug.GraphiQL,
+      schema: QuickPollWeb.Schema.Schema,
+      interface: :simple
+
+    forward "/", Absinthe.Plug, schema: QuickPollWeb.Schema.Schema
+  end
 end
