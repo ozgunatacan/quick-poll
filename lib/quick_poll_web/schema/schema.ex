@@ -9,6 +9,12 @@ defmodule QuickPollWeb.Schema.Schema do
       arg(:id, non_null(:id))
       resolve(&Polls.poll/3)
     end
+
+    @desc "Get results of a poll given by id."
+    field :results, list_of(:result) do
+      arg(:id, non_null(:id))
+      resolve(&Polls.results/3)
+    end
   end
 
   # Object types
@@ -24,5 +30,10 @@ defmodule QuickPollWeb.Schema.Schema do
   object :option do
     field :id, non_null(:id)
     field :title, non_null(:string)
+  end
+
+  object :result do
+    field :option_id, non_null(:id)
+    field :count, non_null(:integer)
   end
 end

@@ -30,7 +30,7 @@ defmodule QuickPoll.Factory do
   end
 
   # needed this because we do nested forms
-  def nested_form_params(attrs \\ %{}) do
+  def nested_form_params(_attrs \\ %{}) do
     params_for(:poll)
     |> Map.merge(%{
       options: %{
