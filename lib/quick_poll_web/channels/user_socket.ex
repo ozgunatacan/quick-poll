@@ -1,5 +1,6 @@
 defmodule QuickPollWeb.UserSocket do
   use Phoenix.Socket
+  use Absinthe.Phoenix.Socket, schema: QuickPollWeb.Schema.Schema
 
   ## Channels
   channel "results:*", QuickPollWeb.ResultsChannel

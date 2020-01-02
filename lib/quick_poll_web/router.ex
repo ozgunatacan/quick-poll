@@ -28,7 +28,8 @@ defmodule QuickPollWeb.Router do
 
     forward "/graphiql", Absinthe.Plug.GraphiQL,
       schema: QuickPollWeb.Schema.Schema,
-      interface: :simple
+      interface: :simple,
+      socket: QuickPollWeb.UserSocket
 
     forward "/", Absinthe.Plug, schema: QuickPollWeb.Schema.Schema
   end

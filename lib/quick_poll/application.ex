@@ -11,9 +11,10 @@ defmodule QuickPoll.Application do
       # Start the Ecto repository
       QuickPoll.Repo,
       # Start the endpoint when the application starts
-      QuickPollWeb.Endpoint
+      QuickPollWeb.Endpoint,
       # Starts a worker by calling: QuickPoll.Worker.start_link(arg)
       # {QuickPoll.Worker, arg},
+      {Absinthe.Subscription, [QuickPollWeb.Endpoint]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

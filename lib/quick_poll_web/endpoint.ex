@@ -1,5 +1,6 @@
 defmodule QuickPollWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :quick_poll
+  use Absinthe.Phoenix.Endpoint
 
   socket "/socket", QuickPollWeb.UserSocket,
     websocket: true,
