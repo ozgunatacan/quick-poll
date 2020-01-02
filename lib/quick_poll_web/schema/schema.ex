@@ -22,6 +22,12 @@ defmodule QuickPollWeb.Schema.Schema do
       arg(:input, non_null(:poll_input))
       resolve(&Polls.create_poll/3)
     end
+
+    field :vote, :vote do
+      arg(:poll_id, non_null(:id))
+      arg(:option_id, non_null(:id))
+      resolve(&Polls.vote/3)
+    end
   end
 
   input_object :poll_input do
@@ -54,5 +60,10 @@ defmodule QuickPollWeb.Schema.Schema do
   object :result do
     field :option_id, non_null(:id)
     field :count, non_null(:integer)
+  end
+
+  object :vote do
+    field :poll_id, non_null(:id)
+    field :option_id, non_null(:id)
   end
 end

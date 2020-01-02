@@ -34,4 +34,17 @@ defmodule QuickPollWeb.Resolvers.Polls do
         {:ok, poll}
     end
   end
+
+  def vote(_parent, %{poll_id: poll_id, option_id: _option_id} = attrs, _) do
+    with %Poll{} = poll <- Polls.get_poll(poll_id),
+         {:ok, vote} <- Polls.vote(poll, attrs) do
+      {:ok, vote}
+    else
+      {:error, changeset} ->
+        {:error, message: "Could not vote!", details: ChangesetErrors.error_details(changeset)}
+
+      _ ->
+        {:error, "Cannot vote"}
+    end
+  end
 end

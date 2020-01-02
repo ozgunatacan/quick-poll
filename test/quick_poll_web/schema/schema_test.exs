@@ -113,5 +113,31 @@ defmodule QuickPollWeb.Schema.SchemaTest do
                }
              }
     end
+
+    test "vote mutation votes successfully for a given poll", %{conn: conn} do
+      poll = insert_poll_with_options()
+      [op1, _op2] = poll.options
+
+      mutation = """
+      mutation($pollId: ID!, $optionId: ID!) {
+        vote(pollId: $pollId, optionId: $optionId) {
+          optionId
+          pollId
+        }
+      }
+      """
+
+      variables = %{"pollId" => poll.id, "optionId" => op1.id}
+      conn = post(conn, "/api", query: mutation, variables: variables)
+
+      assert json_response(conn, 200) == %{
+               "data" => %{
+                 "vote" => %{
+                   "optionId" => Integer.to_string(op1.id),
+                   "pollId" => Integer.to_string(poll.id)
+                 }
+               }
+             }
+    end
   end
 end
