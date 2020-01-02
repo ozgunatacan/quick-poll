@@ -12,16 +12,17 @@ defmodule QuickPollWeb.Resolvers.Polls do
   def results(_parent, %{id: id}, _context) do
     with %Poll{} = poll <- Polls.get_poll(id),
          results <- Polls.results(poll.id) do
-      results =
-        results
-        |> Map.keys()
-        |> Enum.map(&%{option_id: &1, count: results[&1]})
-
-      {:ok, results}
+      {:ok, to_graphql(results)}
     else
       _ ->
         {:error, "No poll with given id"}
     end
+  end
+
+  defp to_graphql(results) do
+    results
+    |> Map.keys()
+    |> Enum.map(&%{option_id: &1, count: results[&1]})
   end
 
   def create_poll(_parent, %{input: params}, _) do
@@ -38,6 +39,8 @@ defmodule QuickPollWeb.Resolvers.Polls do
   def vote(_parent, %{poll_id: poll_id, option_id: _option_id} = attrs, _) do
     with %Poll{} = poll <- Polls.get_poll(poll_id),
          {:ok, vote} <- Polls.vote(poll, attrs) do
+      results = poll.id |> Polls.results() |> to_graphql
+      Absinthe.Subscription.publish(QuickPollWeb.Endpoint, results, new_vote: poll.id)
       {:ok, vote}
     else
       {:error, changeset} ->

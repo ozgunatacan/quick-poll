@@ -30,6 +30,16 @@ defmodule QuickPollWeb.Schema.Schema do
     end
   end
 
+  subscription do
+    field :new_vote, list_of(:result) do
+      arg(:poll_id, non_null(:id))
+
+      config(fn args, _info ->
+        {:ok, topic: args.poll_id}
+      end)
+    end
+  end
+
   input_object :poll_input do
     field :question, non_null(:string)
     field :multi, :boolean
