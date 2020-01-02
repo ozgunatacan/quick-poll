@@ -46,6 +46,7 @@ defmodule QuickPoll.MixProject do
       {:absinthe, "~> 1.4.2"},
       {:absinthe_plug, "~> 1.4.0"},
       {:absinthe_phoenix, "~> 1.4.0"},
+      {:dataloader, "~> 1.0.6"},
       {:ex_machina, "~> 2.3", only: :test},
       {:sobelow, "~> 0.8", only: :dev},
       {:credo, "~> 0.8", only: [:dev, :test], runtime: false}

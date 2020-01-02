@@ -1,5 +1,6 @@
 defmodule QuickPollWeb.Resolvers.Polls do
   alias QuickPoll.{Polls, Poll}
+  alias QuickPollWeb.Schema.ChangesetErrors
 
   def poll(_parent, %{id: id}, _context) do
     case Polls.get_poll(id) do
@@ -20,6 +21,17 @@ defmodule QuickPollWeb.Resolvers.Polls do
     else
       _ ->
         {:error, "No poll with given id"}
+    end
+  end
+
+  def create_poll(_parent, %{input: params}, _) do
+    case QuickPoll.Polls.create_poll(params) do
+      {:error, changeset} ->
+        {:error,
+         message: "Could not create poll!", details: ChangesetErrors.error_details(changeset)}
+
+      {:ok, poll} ->
+        {:ok, poll}
     end
   end
 end

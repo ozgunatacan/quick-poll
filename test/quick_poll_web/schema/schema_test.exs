@@ -82,4 +82,36 @@ defmodule QuickPollWeb.Schema.SchemaTest do
              }
     end
   end
+
+  describe "mutations" do
+    test "createPoll mutation creates a new poll", %{conn: conn} do
+      mutation = """
+      mutation($poll: PollInput!){
+        createPoll(input: $poll) {
+          question
+          options {
+            title
+          }
+        }
+      }
+      """
+
+      [op1, op2] = build_pair(:option)
+      poll_input = string_params_for(:poll, options: [op1, op2])
+
+      conn = post(conn, "/api", query: mutation, variables: %{"poll" => poll_input})
+
+      assert json_response(conn, 200) == %{
+               "data" => %{
+                 "createPoll" => %{
+                   "question" => poll_input["question"],
+                   "options" => [
+                     %{"title" => op1.title},
+                     %{"title" => op2.title}
+                   ]
+                 }
+               }
+             }
+    end
+  end
 end

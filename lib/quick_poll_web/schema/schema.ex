@@ -17,6 +17,25 @@ defmodule QuickPollWeb.Schema.Schema do
     end
   end
 
+  mutation do
+    field :create_poll, :poll do
+      arg(:input, non_null(:poll_input))
+      resolve(&Polls.create_poll/3)
+    end
+  end
+
+  input_object :poll_input do
+    field :question, non_null(:string)
+    field :multi, :boolean
+    field :duplicate_check, :integer
+    field :spam_prevention, :boolean
+    field :options, non_null(list_of(:option_input))
+  end
+
+  input_object :option_input do
+    field :title, non_null(:string)
+  end
+
   # Object types
   object :poll do
     field :id, non_null(:id)
