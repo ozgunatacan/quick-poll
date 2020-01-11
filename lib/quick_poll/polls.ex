@@ -21,13 +21,13 @@ defmodule QuickPoll.Polls do
   def get_poll!(id) do
     Poll
     |> Repo.get!(id)
-    |> Repo.preload(:options)
+    |> Repo.preload(options: from(o in Option, order_by: o.id))
   end
 
   def get_poll(id) do
     Poll
     |> Repo.get(id)
-    |> Repo.preload(:options)
+    |> Repo.preload(options: from(o in Option, order_by: o.id))
   end
 
   def vote(%Poll{} = poll, attrs) do
