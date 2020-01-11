@@ -51,7 +51,7 @@ defmodule QuickPollWeb.Schema.SchemaTest do
 
     test "results field should return results of the given poll id", %{conn: conn} do
       poll = insert_poll_with_options()
-      [op1, op2] = poll.options
+      [op1, op2] = Enum.sort(poll.options, &(&1.id < &2.id))
       insert_list(4, :vote, poll: poll, option: op1)
       insert_list(6, :vote, poll: poll, option: op2)
 
