@@ -41,6 +41,7 @@ defmodule QuickPoll.Polls do
       from v in Vote,
         where: v.poll_id == ^poll_id,
         group_by: v.option_id,
+        order_by: v.option_id,
         select: {v.option_id, count(v.id)}
 
     Map.new(Repo.all(q))
