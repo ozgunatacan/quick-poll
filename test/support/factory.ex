@@ -2,6 +2,8 @@ defmodule QuickPoll.Factory do
   use ExMachina.Ecto, repo: QuickPoll.Repo
   alias QuickPoll.{Poll, Option, Vote, Repo}
 
+  import Ecto.Query
+
   def poll_factory() do
     %Poll{
       question: sequence(:question, &"Question-#{&1}")
@@ -25,8 +27,10 @@ defmodule QuickPoll.Factory do
     poll = insert(:poll)
     insert_pair(:option, %{poll: poll})
 
+    q = from o in Option, order_by: o.id
+
     poll
-    |> Repo.preload(:options)
+    |> Repo.preload(options: q)
   end
 
   # needed this because we do nested forms
