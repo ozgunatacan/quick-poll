@@ -1,11 +1,11 @@
 defmodule QuickPoll.Polls do
-  alias QuickPoll.{Poll, Repo, Vote}
+  alias QuickPoll.{Poll, Repo, Vote, Option}
   import Ecto.Query
 
   def list_polls() do
     Poll
     |> Repo.all()
-    |> Repo.preload(:options)
+    |> Repo.preload(options: from(o in Option, order_by: o.id))
   end
 
   def change_poll(%Poll{} = poll) do
